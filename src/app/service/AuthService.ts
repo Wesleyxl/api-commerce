@@ -2,6 +2,19 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "@model/User";
 import authConfig from "@config/auth";
+import { Op } from "sequelize";
+
+interface LoginProps {
+  email: string;
+  password: string;
+}
+interface RegisterProps {
+  name: string;
+  email: string;
+  password: string;
+  phone: string;
+  birth: string;
+}
 
 class AuthService {
   /**
@@ -21,15 +34,24 @@ class AuthService {
    * @param password
    * @returns object (user data and access_token)
    */
-  public async login(email: string, password: string) {
+  public async login(body: LoginProps) {
     try {
       // get user by email
-      const user = await User.findOne({ where: { email } });
+      const user = await User.findOne({
+        where: {
+          email: {
+            [Op.eq]: body.email,
+          },
+        },
+      });
 
       // verify if user exists
       if (user) {
         // compare password
-        const isValidPassword = await bcrypt.compare(password, user.password);
+        const isValidPassword = await bcrypt.compare(
+          body.password,
+          user.password
+        );
 
         if (isValidPassword) {
           // return user + access_token
@@ -42,6 +64,8 @@ class AuthService {
                 id: user.id,
                 name: user.name,
                 email: user.email,
+                birth: user.birth,
+                phone: user.phone,
               },
               access_token: token,
             },
@@ -60,32 +84,36 @@ class AuthService {
     } catch (error) {
       return {
         success: false,
-        message: error,
+        message: error.message,
       };
     }
   }
 
   /**
    *  create new user
-   * @param name
-   * @param email
-   * @param password
+   * @params {object}
    * @returns object (user data and access_token)
    */
-  public async register(name: string, email: string, password: string) {
+  public async register(body: RegisterProps) {
     try {
-      const passwordHash = await bcrypt.hash(password, 8);
+      const passwordHash = await bcrypt.hash(body.password, 8);
 
       const [user, created] = await User.findOrCreate({
-        where: { email },
+        where: {
+          email: {
+            [Op.eq]: body.email,
+          },
+        },
         defaults: {
-          name: name,
-          email: email,
+          name: body.name,
+          email: body.email,
           password: passwordHash,
+          birth: body.birth,
+          phone: body.phone,
         },
       });
 
-      if (!created) {
+      if (created) {
         const token = AuthService.createUserToken(user.id);
 
         return {
@@ -95,6 +123,8 @@ class AuthService {
               id: user.id,
               name: user.name,
               email: user.email,
+              birth: user.birth,
+              phone: user.phone,
             },
             access_token: token,
           },
@@ -103,12 +133,12 @@ class AuthService {
 
       return {
         success: false,
-        message: "Email or password is incorrect",
+        message: "Email already exists",
       };
     } catch (error) {
       return {
         success: false,
-        message: error,
+        message: error.message,
       };
     }
   }
@@ -138,7 +168,7 @@ class AuthService {
     } catch (error) {
       return {
         success: false,
-        message: error,
+        message: error.message,
       };
     }
   }

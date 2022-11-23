@@ -6,8 +6,8 @@ const sequelize = new Sequelize(
   dbConfig.username,
   dbConfig.password,
   {
-    host: dbConfig.host,
     dialect: "mysql",
+    host: "localhost",
     define: {
       timestamps: true,
       underscored: true,

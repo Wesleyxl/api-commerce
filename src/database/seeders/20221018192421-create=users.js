@@ -10,6 +10,8 @@ module.exports = {
         name: "Wesley Alves",
         email: "wesley@gmail.com",
         password: await bcrypt.hash("test@123", 8),
+        birth: new Date("01/28/1998"),
+        phone: "+55(11)99972-7429",
         created_at: new Date(),
         updated_at: new Date(),
       },

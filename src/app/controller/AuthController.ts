@@ -16,7 +16,7 @@ class AuthController extends Controller {
 
       const { email, password } = req.body;
 
-      const registerResponse = await AuthService.login(email, password);
+      const registerResponse = await AuthService.login({ email, password });
       if (registerResponse.success) {
         return res.json({
           success: true,
@@ -31,7 +31,7 @@ class AuthController extends Controller {
     } catch (error) {
       return res.status(400).json({
         success: false,
-        message: error,
+        message: error.message,
       });
     }
   }
@@ -46,9 +46,15 @@ class AuthController extends Controller {
           message: validator.message,
         });
       }
-      const { name, email, password } = req.body;
+      const { name, email, password, birth, phone } = req.body;
 
-      const response = await AuthService.register(name, email, password);
+      const response = await AuthService.register({
+        name,
+        email,
+        password,
+        birth,
+        phone,
+      });
 
       if (response.success) {
         return res.json({
@@ -59,12 +65,12 @@ class AuthController extends Controller {
 
       return res.status(400).json({
         success: false,
-        data: "Email or password is incorrect",
+        data: response.message,
       });
     } catch (error) {
       return res.status(401).json({
         success: false,
-        message: error,
+        message: error.message,
       });
     }
   }
@@ -89,7 +95,7 @@ class AuthController extends Controller {
     } catch (error) {
       return res.status(401).json({
         success: false,
-        message: error,
+        message: error.message,
       });
     }
   }

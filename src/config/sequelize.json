@@ -1,7 +1,7 @@
 {
   "username": "wesley",
   "password": "q1r4w2e3*",
-  "database": "typescript_api",
+  "database": "api-e-commerce",
   "host": "127.0.0.1",
   "dialect": "mysql",
   "define": {
