@@ -55,6 +55,28 @@ class CategoryService extends Service {
       };
     }
   }
+
+  public async updateCategory(id: string, name: string) {
+    try {
+      const category = await Category.update({ name }, { where: { id } });
+      if (category) {
+        return {
+          success: true,
+          data: category,
+        };
+      }
+
+      return {
+        success: false,
+        message: "Something went wrong",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
+  }
 }
 
 export default new CategoryService();

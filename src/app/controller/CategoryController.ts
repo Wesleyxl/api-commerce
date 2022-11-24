@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import CategoryService from "@service/CategoryService";
 
 class CategoryController extends Controller {
-  public async index(req: Request, res: Response) {
+  public async index(res: Response) {
     try {
       const categories = await CategoryService.getCategories();
 
@@ -17,6 +17,20 @@ class CategoryController extends Controller {
       return res.status(400).json({
         success: false,
         data: categories.message,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+
+  public async show(req: Request, res: Response) {
+    try {
+      return res.status(200).json({
+        success: true,
+        data: req.params.id,
       });
     } catch (error) {
       return res.status(500).json({
@@ -50,6 +64,53 @@ class CategoryController extends Controller {
       return res.status(400).json({
         success: false,
         message: response.message,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+
+  public async update(req: Request, res: Response) {
+    try {
+      const validator = Controller.validator(req.body);
+
+      if (!validator.success) {
+        return res.status(401).json({
+          success: false,
+          message: validator.message,
+        });
+      }
+
+      const { name } = req.body;
+      const { id } = req.params;
+      const response = await CategoryService.updateCategory(id, name);
+
+      if (response.success) {
+        return res.status(200).json({
+          success: true,
+        });
+      }
+
+      return res.status(400).json({
+        success: false,
+        message: response.message,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+
+  public async delete(req: Request, res: Response) {
+    try {
+      return res.status(200).json({
+        success: true,
+        data: req.params.id,
       });
     } catch (error) {
       return res.status(500).json({

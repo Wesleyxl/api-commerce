@@ -15,8 +15,11 @@ routes.post("/auth/register", AuthController.register);
 routes.get("/auth/me", auth, AuthController.me);
 
 // category routes
-routes.post("/category/create", CategoryController.create);
 routes.get("/category/", CategoryController.index);
+routes.get("/category/:id", CategoryController.show);
+routes.post("/category/create", CategoryController.create);
+routes.post("/category/:id", CategoryController.update);
+routes.delete("/category/:id", CategoryController.delete);
 
 // test private route
 routes.get("/test", (req, res) => {
