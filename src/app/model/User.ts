@@ -6,8 +6,9 @@ class User extends Model {
   declare name: string;
   declare email: string;
   declare password: string;
-  declare birth: Date;
+  declare birth: string;
   declare phone: string;
+  declare image: string;
 }
 
 User.init(
@@ -36,6 +37,10 @@ User.init(
     phone: {
       type: new DataTypes.STRING(),
       allowNull: false,
+    },
+    image: {
+      type: new DataTypes.STRING(),
+      allowNull: true,
     },
   },
   {

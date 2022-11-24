@@ -125,6 +125,7 @@ class AuthService {
               email: user.email,
               birth: user.birth,
               phone: user.phone,
+              image: user.image,
             },
             access_token: token,
           },
@@ -151,7 +152,16 @@ class AuthService {
   public async me(id: number) {
     try {
       const user = await User.findByPk(id, {
-        attributes: ["id", "name", "email", "created_at", "updated_at"],
+        attributes: [
+          "id",
+          "name",
+          "email",
+          "birth",
+          "phone",
+          "image",
+          "created_at",
+          "updated_at",
+        ],
       });
 
       if (user) {
