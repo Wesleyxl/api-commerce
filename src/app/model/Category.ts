@@ -23,6 +23,6 @@ Category.init(
   { tableName: "categories", sequelize }
 );
 
-Category.hasMany(Product, { foreignKey: "category_id", as: "products" });
+// Category.hasMany(sequelize.models.Product, {});
 
 export default Category;

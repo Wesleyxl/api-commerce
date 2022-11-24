@@ -56,6 +56,9 @@ Product.init(
   { tableName: "categories", sequelize }
 );
 
-Product.belongsTo(Category, { foreignKey: "id", as: "category" });
+Product.belongsTo(sequelize.models.Category, {
+  foreignKey: "id",
+  as: "category",
+});
 
 export default Product;

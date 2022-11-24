@@ -5,6 +5,7 @@ import auth from "@middleware/Auth";
 
 // controllers
 import AuthController from "@controller/AuthController";
+import CategoryController from "@controller/CategoryController";
 
 const routes = Router();
 
@@ -12,6 +13,10 @@ const routes = Router();
 routes.post("/auth/login", AuthController.login);
 routes.post("/auth/register", AuthController.register);
 routes.get("/auth/me", auth, AuthController.me);
+
+// category routes
+routes.post("/category/create", CategoryController.create);
+routes.get("/category/", CategoryController.index);
 
 // test private route
 routes.get("/test", (req, res) => {
