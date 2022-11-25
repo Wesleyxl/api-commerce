@@ -28,9 +28,20 @@ class CategoryController extends Controller {
 
   public async show(req: Request, res: Response) {
     try {
+      const { id } = req.params;
+
+      const response = await CategoryService.showCategory(id);
+
+      if (!response.success) {
+        return res.status(400).json({
+          success: false,
+          message: response.message,
+        });
+      }
+
       return res.status(200).json({
         success: true,
-        data: req.params.id,
+        data: response.data,
       });
     } catch (error) {
       return res.status(500).json({
@@ -108,9 +119,18 @@ class CategoryController extends Controller {
 
   public async delete(req: Request, res: Response) {
     try {
+      const { id } = req.params;
+
+      const response = await CategoryService.deleteCategory(id);
+      if (!response.success) {
+        return res.status(400).json({
+          success: false,
+          message: response.message,
+        });
+      }
+
       return res.status(200).json({
         success: true,
-        data: req.params.id,
       });
     } catch (error) {
       return res.status(500).json({

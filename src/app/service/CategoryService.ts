@@ -56,6 +56,30 @@ class CategoryService extends Service {
     }
   }
 
+  public async showCategory(id: string) {
+    try {
+      const category = await Category.findByPk(id);
+      if (!category) {
+        return {
+          success: false,
+          message: "Category not found",
+        };
+      }
+
+      return {
+        success: true,
+        data: {
+          category,
+        },
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
+  }
+
   public async updateCategory(id: string, name: string) {
     try {
       const category = await Category.update({ name }, { where: { id } });
@@ -69,6 +93,27 @@ class CategoryService extends Service {
       return {
         success: false,
         message: "Something went wrong",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
+  }
+
+  public async deleteCategory(id: string) {
+    try {
+      const category = await Category.destroy({ where: { id } });
+      if (!category) {
+        return {
+          success: false,
+          message: "Something went wrong",
+        };
+      }
+
+      return {
+        success: true,
       };
     } catch (error) {
       return {

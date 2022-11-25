@@ -15,24 +15,10 @@ routes.post("/auth/register", AuthController.register);
 routes.get("/auth/me", auth, AuthController.me);
 
 // category routes
-routes.get("/category/", CategoryController.index);
-routes.get("/category/:id", CategoryController.show);
-routes.post("/category/create", CategoryController.create);
-routes.post("/category/:id", CategoryController.update);
-routes.delete("/category/:id", CategoryController.delete);
-
-// test private route
-routes.get("/test", (req, res) => {
-  return res.json({
-    success: true,
-    data: "ok",
-  });
-});
-routes.get("/test/private", auth, (req, res) => {
-  return res.json({
-    success: true,
-    data: "ok",
-  });
-});
+routes.get("/category/", auth, CategoryController.index);
+routes.get("/category/:id", auth, CategoryController.show);
+routes.post("/category/create", auth, CategoryController.create);
+routes.post("/category/:id", auth, CategoryController.update);
+routes.delete("/category/:id", auth, CategoryController.delete);
 
 export default routes;
